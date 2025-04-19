@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MoviTrak - Track Your Watchlist</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #00bcd4;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .movie-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .movie-item {
+            background-color: #1e1e1e;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            transition: background-color 0.2s;
+        }
+
+        .movie-item:hover {
+            background-color: #292929;
+        }
+
+        .movie-title {
+            font-size: 1.2em;
+            color: #fdd835;
+        }
+
+        .movie-info {
+            font-size: 0.9em;
+            color: #bbb;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8em;
+            color: #555;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🎬 MoviTrak</h1>
+    <p>Track your movies & shows</p>
+</header>
+
+<main>
+    <h2>Watchlist</h2>
+    <ul class="movie-list" id="movieList">
+        <li>Loading movies...</li>
+    </ul>
+</main>
+
+<footer>
+    © 2025 MoviTrak. All rights reserved.
+</footer>
+
+<script>
+    async function fetchMovies() {
+        try {
+            const response = await fetch('/api/movies'); // Your REST endpoint
+            const movies = await response.json();
+
+            const movieList = document.getElementById('movieList');
+            movieList.innerHTML = ''; // Clear loading text
+
+            if (movies.length === 0) {
+                movieList.innerHTML = '<li>No movies found.</li>';
+            }
+
+            movies.forEach(movie => {
+                const li = document.createElement('li');
+                li.className = 'movie-item';
+                li.innerHTML = `
+                    <div class="movie-title">${movie.title}</div>
+                    <div class="movie-info">${movie.genre} | Watched: ${movie.watched ? 'Yes' : 'No'}</div>
+                `;
+                movieList.appendChild(li);
+            });
+        } catch (error) {
+            console.error('Error fetching movies:', error);
+            document.getElementById('movieList').innerHTML = '<li>Error loading movies.</li>';
+        }
+    }
+
+    fetchMovies();
+</script>
+</body>
+</html>

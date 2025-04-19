@@ -1,10 +1,10 @@
-package com.movitrack.moviesapi;
+package com.movitrack.viewapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MoviTrakControllerTests {
+class MoviTrakViewControllerTests {
 
     @Test
     void contextLoads() {
