@@ -29,10 +29,10 @@ public class MovitrakService {
 
     private void populateStore() {
         store.clear();
-        dbClient.refreshData().subscribe(items -> {
-            for(Item item : items)
-                store.put(item.getId(), item);
-        });
+        List<Item> items = dbClient.refreshData().block();
+        assert items != null;
+        for(Item item : items)
+            store.put(item.getId(), item);
     }
 
 }

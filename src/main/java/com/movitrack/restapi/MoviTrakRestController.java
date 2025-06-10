@@ -1,8 +1,11 @@
 package com.movitrack.restapi;
 
+import com.movitrack.model.Item;
 import com.movitrack.model.client.DBClientConfig;
 import com.movitrack.service.MovitrakService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -15,13 +18,13 @@ public class MoviTrakRestController {
     }
 
     @GetMapping("/data")
-    public String index() {
-        return movitrakService.getAll().toString();
+    public List<Item> index() {
+        return movitrakService.getAll();
     }
 
     @GetMapping("/refresh")
-    public String refresh() {
-        return movitrakService.refresh().toString();
+    public List<Item> refresh() {
+        return movitrakService.refresh();
     }
 
 }
