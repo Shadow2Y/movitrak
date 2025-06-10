@@ -1,36 +1,40 @@
 package com.movitrack.model.client;
 
 import lombok.Getter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
-import java.util.function.Consumer;
 
+
+@Slf4j
 @Getter
 public enum DBClientConfig {
 
-    MOVIESDB("https://sheetdb.io/api/v1/6t6tkopzl04ii","/search?id=2","limit:2"),
+    MOVIESDB("https://sheetdb.io/api/v1/6t6tkopzl04ii","","","limit:5"),
 
     ;
 
     private String host;
     private String endpoint;
-    private Consumer<HttpHeaders> headers;
+    private HttpHeaders defaultHeaders;
+    private HashMap<String,String> defaultAttributes;
 
-    DBClientConfig(String host, String endpoint, String... headers) {
+    DBClientConfig(String host, String endpoint, String defaultHeaders, String attributes) {
         this.host = host;
         this.endpoint = endpoint;
-        this.headers = httpHeaders -> {
-            for (String header : headers) {
-                String[] keyVal = header.split(":", 2);
-                if(keyVal.length == 2)
-                    httpHeaders.set(keyVal[0], keyVal[1]);
-            }
-        };
+        this.defaultHeaders = new HttpHeaders();
+        this.defaultAttributes = new HashMap<>();
+        for(String header : defaultHeaders.split(";")) {
+            String[] keyVal = header.split(":", 2);
+            if(keyVal.length == 2)
+                this.defaultHeaders.set(keyVal[0], keyVal[1]);
+        }
+        for(String attribute : attributes.split(";")) {
+            String[] keyVal = attribute.split(":", 2);
+            if(keyVal.length == 2)
+                this.defaultAttributes.put(keyVal[0], keyVal[1]);
+        }
     }
 
 }
